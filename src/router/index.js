@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import AuthService from '../services/auth/service.js'
+
+import HomeView from '@/views/HomeView.vue'
+import { authService } from '@/services/auth'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,7 +15,7 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: () => import('../views/LoginView.vue'),
+      component: () => import('@/views/LoginView.vue'),
       meta: { guestOnly: true },
     },
     {
@@ -22,7 +23,7 @@ const router = createRouter({
       name: 'logout',
       beforeEnter: async () => {
         try {
-          await AuthService.logout()
+          await authService.logout()
         } catch (error) {
           console.error('we have trouble logout', error)
         }

@@ -15,24 +15,10 @@ class AuthService {
   }
 
   async logout() {
-    const token = localStorage.getItem('access_token')
-
-    await api.post(
-      '/auth/logout',
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    )
+    await api.post('/auth/logout', {})
 
     localStorage.removeItem('access_token')
   }
-
-  getCurrentUser() {
-    return JSON.parse(localStorage.getItem('access_token'))
-  }
 }
 
-export default new AuthService()
+export const authService = new AuthService()

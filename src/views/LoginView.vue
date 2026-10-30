@@ -1,8 +1,9 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import AuthService from '@/services/auth/service'
-import Loginform from '@/components/LoginForm.vue'
+
+import { authService } from '@/services/auth'
+import LoginForm from '@/components/LoginForm.vue'
 
 const router = useRouter()
 const loading = ref(false)
@@ -13,7 +14,7 @@ const handleLogin = async (data) => {
   message.value = ''
 
   try {
-    await AuthService.login(data)
+    await authService.login(data)
     router.push({ name: 'home' })
   } catch (error) {
     message.value = error.message || 'Login failed!'
@@ -34,7 +35,7 @@ const handleLogin = async (data) => {
         <p>Log in to your account to continue</p>
       </div>
 
-      <Loginform :loading="loading" @submit-login="handleLogin" />
+      <LoginForm :loading="loading" @submit-login="handleLogin" />
 
       <transition name="fade">
         <div v-if="message" class="error-message">
