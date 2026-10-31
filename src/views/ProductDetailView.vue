@@ -12,11 +12,11 @@ const product = ref(null)
 const showDeleteModal = ref(false)
 
 const fetchProduct = async (id) => {
-  product.value = await productsService.getById(id)
+  product.value = await productsService.getProduct(id)
 }
 
 const handleDelete = async () => {
-  await productsService.delete(route.params.id)
+  await productsService.deleteProduct(route.params.id)
   showDeleteModal.value = false
   router.push({ name: 'products' })
 }
@@ -59,7 +59,7 @@ watch(
         </div>
       </div>
 
-      <ProductDetail :product="product" />
+      <ProductDetail v-if="product" :product="product" />
     </div>
   </div>
 </template>

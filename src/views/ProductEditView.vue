@@ -13,15 +13,15 @@ const product = ref(null)
 const categories = ref([])
 
 const fetchProduct = async (id) => {
-  product.value = await productsService.getById(id)
+  product.value = await productsService.getProduct(id)
 }
 
 const fetchCategories = async () => {
-  categories.value = await categoryService.get()
+  categories.value = await categoryService.getCategoryList()
 }
 
 const handleEditProduct = async (updatedData) => {
-  await productsService.update(route.params.id, updatedData)
+  await productsService.updateProduct(route.params.id, updatedData)
   router.push({
     name: 'products',
   })
