@@ -9,7 +9,7 @@ const router = useRouter()
 const products = ref([])
 
 const fetchProducts = async () => {
-  const data = await productsService.get()
+  const data = await productsService.getProductList()
   products.value = data
   console.log(data)
 }

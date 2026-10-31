@@ -9,11 +9,11 @@ const router = useRouter()
 const categories = ref([])
 
 const handleAddProduct = async (data) => {
-  await productsService.post(data)
+  await productsService.createProduct(data)
   router.push({ name: 'products' })
 }
 const fetchCategories = async () => {
-  categories.value = await categoryService.get()
+  categories.value = await categoryService.getCategoryList()
 }
 
 onMounted(() => {

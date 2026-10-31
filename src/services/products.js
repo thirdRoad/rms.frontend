@@ -1,27 +1,27 @@
 import { api } from '@/api/client'
 
 class ProductsService {
-  async get() {
+  async getProductList() {
     const response = await api.get('/products/')
     console.log('data', response.data.data)
     return response.data.data
   }
 
-  async post(body) {
+  async createProduct(body) {
     await api.post('/products/', body, {
       headers: {
         'Content-Type': 'application/json',
       },
     })
   }
-  async getById(id) {
+  async getProduct(id) {
     const response = await api.get(`/products/${id}`)
     return response.data.data
   }
-  async delete(id) {
+  async deleteProduct(id) {
     await api.delete(`/products/${id}`)
   }
-  async update(id, data) {
+  async updateProduct(id, data) {
     const response = await api.patch(`/products/${id}`, data)
     return response.data
   }

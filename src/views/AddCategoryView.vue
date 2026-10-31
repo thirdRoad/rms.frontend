@@ -6,7 +6,7 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 const handleAddCategory = async (data) => {
-  await categoryService.post(data)
+  await categoryService.createCategory(data)
   router.push({ name: 'products' })
 }
 </script>

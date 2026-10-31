@@ -6,7 +6,7 @@ const categories = ref([])
 const selectedCategoryId = ref(null) // Optional state to handle active click highlight
 
 const fetchCategories = async () => {
-  const data = await categoryService.get()
+  const data = await categoryService.getCategoryList()
   categories.value = data
   console.log('categories', data)
 }
