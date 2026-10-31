@@ -9,6 +9,7 @@ import AddProductView from '@/views/AddProductView.vue'
 import ProductDetailView from '@/views/ProductDetailView.vue'
 import ProductEditView from '@/views/ProductEditView.vue'
 import KitchenView from '@/views/KitchenView.vue'
+import TablesView from '@/views/TablesView.vue'
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -34,7 +35,7 @@ const router = createRouter({
 		{
 			path: '/tables',
 			name: 'tables',
-			component: EmptyView,
+			component: TablesView,
 			meta: { requiresAuth: true, showAppNavbar: true },
 		},
 		{
