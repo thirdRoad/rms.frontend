@@ -1,4 +1,6 @@
 <script setup>
+import { formatPrice } from '@/utils/format'
+
 defineProps({
 	product: {
 		type: Object,
@@ -11,7 +13,7 @@ defineProps({
 	<div class="product-card">
 		<div class="product-card__info">
 			<h4>{{ product.name }}</h4>
-			<p class="price">{{ product.price.toFixed(2) }} ₺</p>
+			<p class="price">{{ formatPrice(product.price) }}</p>
 		</div>
 	</div>
 </template>
