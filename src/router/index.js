@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import HomeView from '@/views/HomeView.vue'
 import { authService } from '@/services/auth'
+import EmptyView from '@/views/EmptyView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,6 +18,36 @@ const router = createRouter({
       name: 'login',
       component: () => import('@/views/LoginView.vue'),
       meta: { guestOnly: true },
+    },
+    {
+      path: '/products',
+      name: 'products',
+      component: EmptyView,
+      meta: { requiresAuth: true, showAppNavbar: true },
+    },
+    {
+      path: '/tables',
+      name: 'tables',
+      component: EmptyView,
+      meta: { requiresAuth: true, showAppNavbar: true },
+    },
+    {
+      path: '/cash',
+      name: 'cash',
+      component: EmptyView,
+      meta: { requiresAuth: true, showAppNavbar: true },
+    },
+    {
+      path: '/modaration',
+      name: 'modaration',
+      component: EmptyView,
+      meta: { requiresAuth: true, showAppNavbar: true },
+    },
+    {
+      path: '/kitchen',
+      name: 'kitchen',
+      component: EmptyView,
+      meta: { requiresAuth: true, showAppNavbar: true },
     },
     {
       path: '/logout',
