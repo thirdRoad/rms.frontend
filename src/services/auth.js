@@ -15,9 +15,14 @@ class AuthService {
   }
 
   async logout() {
-    await api.post('/auth/logout', {})
-
-    localStorage.removeItem('access_token')
+    try {
+      await api.post('/auth/logout', {})
+    } catch (error) {
+      console.error('We have a trouble with logout.')
+      console.log(error)
+    } finally {
+      localStorage.removeItem('access_token')
+    }
   }
 }
 
