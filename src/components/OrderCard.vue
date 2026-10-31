@@ -1,15 +1,10 @@
 <script setup>
+import { formatTime } from '@/utils/format'
+
 defineProps({
 	order: { type: Object, required: true },
 })
 const emit = defineEmits(['done', 'cancel'])
-
-function formatTime(dateString) {
-	return new Date(dateString).toLocaleTimeString('tr-TR', {
-		hour: '2-digit',
-		minute: '2-digit',
-	})
-}
 </script>
 
 <template>
