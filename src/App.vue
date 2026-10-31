@@ -7,9 +7,9 @@ const route = useRoute()
 </script>
 
 <template>
-  <AppNavbar v-if="route.meta.showAppNavbar" />
+	<AppNavbar v-if="route.meta.showAppNavbar" />
 
-  <RouterView />
+	<RouterView />
 </template>
 
 <style scoped></style>
