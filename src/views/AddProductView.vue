@@ -9,24 +9,24 @@ const router = useRouter()
 const categories = ref([])
 
 const handleAddProduct = async (data) => {
-  await productsService.createProduct(data)
-  router.push({ name: 'products' })
+	await productsService.createProduct(data)
+	router.push({ name: 'products' })
 }
 const fetchCategories = async () => {
-  categories.value = await categoryService.getCategoryList()
+	categories.value = await categoryService.getCategoryList()
 }
 
 onMounted(() => {
-  fetchCategories()
+	fetchCategories()
 })
 </script>
 
 <template>
-  <div class="add-category-container">
-    <div class="add-category-wrapper">
-      <main class="form-section">
-        <AddProductForm :categories="categories" @submit-add-product="handleAddProduct" />
-      </main>
-    </div>
-  </div>
+	<div class="add-category-container">
+		<div class="add-category-wrapper">
+			<main class="form-section">
+				<AddProductForm :categories="categories" @submit-add-product="handleAddProduct" />
+			</main>
+		</div>
+	</div>
 </template>
