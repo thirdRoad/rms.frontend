@@ -6,7 +6,7 @@ class OrderService {
     return response.data.data
   }
 
-  async getOrderDetail(orderId) {
+  async getOrderItems(orderId) {
     try {
       const response = await api.get(`/orders/${orderId}/items`)
       return response.data.data
@@ -31,7 +31,7 @@ class OrderService {
         id: orderId,
         time: orderDate,
         status: orderStatus,
-        items: await this.getOrderDetail(orderId),
+        items: await this.getOrderItems(orderId),
       })
     }
 
