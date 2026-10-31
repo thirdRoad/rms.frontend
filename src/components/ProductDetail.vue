@@ -1,13 +1,12 @@
 <script setup>
+import { formatDate, formatPrice } from '@/utils/format'
+
 defineProps({
 	product: {
 		type: Object,
 		required: true,
 	},
 })
-function formatTime(dateString) {
-	return new Date(dateString).toLocaleDateString('tr-TR')
-}
 </script>
 
 <template>
@@ -26,7 +25,7 @@ function formatTime(dateString) {
 
 				<div class="info-item">
 					<span class="info-label">Price</span>
-					<span class="info-value price-tag">{{ Number(product.price).toFixed(2) }} ₺</span>
+					<span class="info-value price-tag">{{ formatPrice(product.price) }}</span>
 				</div>
 
 				<div class="info-item">
@@ -38,7 +37,7 @@ function formatTime(dateString) {
 
 				<div class="info-item full-width" v-if="product.created_at">
 					<span class="info-label">Created At</span>
-					<span class="info-value date-text">{{ formatTime(product.created_at) }}</span>
+					<span class="info-value date-text">{{ formatDate(product.created_at) }}</span>
 				</div>
 			</div>
 		</div>
