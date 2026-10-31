@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import { authService } from '@/services/auth'
 import EmptyView from '@/views/EmptyView.vue'
+import KitchenView from '@/views/KitchenView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -46,7 +47,7 @@ const router = createRouter({
     {
       path: '/kitchen',
       name: 'kitchen',
-      component: EmptyView,
+      component: KitchenView,
       meta: { requiresAuth: true, showAppNavbar: true },
     },
     {
