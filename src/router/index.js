@@ -3,7 +3,11 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import { authService } from '@/services/auth'
 import EmptyView from '@/views/EmptyView.vue'
-
+import ProductsView from '@/views/ProductsView.vue'
+import AddCategoryView from '@/views/AddCategoryView.vue'
+import AddProductView from '@/views/AddProductView.vue'
+import ProductDetailView from '@/views/ProductDetailView.vue'
+import ProductEditView from '@/views/ProductEditView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -22,7 +26,7 @@ const router = createRouter({
     {
       path: '/products',
       name: 'products',
-      component: EmptyView,
+      component: ProductsView,
       meta: { requiresAuth: true, showAppNavbar: true },
     },
     {
@@ -47,6 +51,30 @@ const router = createRouter({
       path: '/kitchen',
       name: 'kitchen',
       component: EmptyView,
+      meta: { requiresAuth: true, showAppNavbar: true },
+    },
+    {
+      path: '/categories/add',
+      name: 'add-category',
+      component: AddCategoryView,
+      meta: { requiresAuth: true, showAppNavbar: true },
+    },
+    {
+      path: '/products/add',
+      name: 'add-product',
+      component: AddProductView,
+      meta: { requiresAuth: true, showAppNavbar: true },
+    },
+    {
+      path: '/products/:id',
+      name: 'product-detail',
+      component: ProductDetailView,
+      meta: { requiresAuth: true, showAppNavbar: true },
+    },
+    {
+      path: '/products/edit/:id',
+      name: 'product-edit',
+      component: ProductEditView,
       meta: { requiresAuth: true, showAppNavbar: true },
     },
     {
