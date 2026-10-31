@@ -3,16 +3,13 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import { authService } from '@/services/auth'
 import EmptyView from '@/views/EmptyView.vue'
-<<<<<<< HEAD
 import ProductsView from '@/views/ProductsView.vue'
 import AddCategoryView from '@/views/AddCategoryView.vue'
 import AddProductView from '@/views/AddProductView.vue'
 import ProductDetailView from '@/views/ProductDetailView.vue'
 import ProductEditView from '@/views/ProductEditView.vue'
-=======
 import KitchenView from '@/views/KitchenView.vue'
 
->>>>>>> d7d2179f3acca066c3d1f408a20d686a7351e48a
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
