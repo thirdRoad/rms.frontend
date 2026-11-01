@@ -1,10 +1,14 @@
 import { api } from '@/api/client'
 
-class CategoryService {
+class TablesService {
     async getTablesList() {
         const response = await api.get('/tables/')
         return response.data.data
     }
+    async getTable(id) {
+		const response = await api.get(`/tables/${id}`)
+		return response.data.data
+	}
 
     async createTable(body) {
         await api.post('/tables/', body, {
@@ -15,4 +19,4 @@ class CategoryService {
     }
 }
 
-export const categoryService = new CategoryService()
+export const tablesService = new TablesService()

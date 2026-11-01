@@ -10,7 +10,8 @@ import ProductDetailView from '@/views/ProductDetailView.vue'
 import ProductEditView from '@/views/ProductEditView.vue'
 import KitchenView from '@/views/KitchenView.vue'
 import TablesView from '@/views/TablesView.vue'
-
+import TableDetailView from '@/views/TableDetailView.vue'
+import AddOrderView from '@/views/AddOrderView.vue'
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
 	routes: [
@@ -38,10 +39,22 @@ const router = createRouter({
 			component: TablesView,
 			meta: { requiresAuth: true, showAppNavbar: true },
 		},
+		{	
+			path: '/tables/:id',
+			name: 'table-detail',
+			component: TableDetailView,
+			meta: { requiresAuth: true, showAppNavbar: true },
+		},
 		{
 			path: '/cash',
 			name: 'cash',
 			component: EmptyView,
+			meta: { requiresAuth: true, showAppNavbar: true },
+		},
+		{
+			path: '/tables/:id/order/new',
+			name: 'order-new',
+			component: AddOrderView,
 			meta: { requiresAuth: true, showAppNavbar: true },
 		},
 		{
