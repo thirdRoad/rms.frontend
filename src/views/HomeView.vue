@@ -31,7 +31,7 @@
 					<div class="card-arrow">→</div>
 				</RouterLink>
 
-				<RouterLink to="/modaration" class="card-btn">
+				<RouterLink to="/moderation" class="card-btn">
 					<div class="card-content">
 						<span class="card-title">Modaration</span>
 						<span class="card-desc">...</span>
