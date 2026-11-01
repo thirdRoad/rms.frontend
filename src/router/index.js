@@ -11,6 +11,10 @@ import ProductEditView from '@/views/ProductEditView.vue'
 import KitchenView from '@/views/KitchenView.vue'
 import TablesView from '@/views/TablesView.vue'
 import TableDetailView from '@/views/TableDetailView.vue'
+import ModerationView from '@/views/ModerationView.vue'
+import UserManagementView from '@/views/UserManagementView.vue'
+import UserDetailView from '@/views/UserDetailView.vue'
+
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
 	routes: [
@@ -51,9 +55,21 @@ const router = createRouter({
 			meta: { requiresAuth: true, showAppNavbar: true },
 		},
 		{
-			path: '/modaration',
-			name: 'modaration',
-			component: EmptyView,
+			path: '/moderation',
+			name: 'moderation',
+			component: ModerationView,
+			meta: { requiresAuth: true, showAppNavbar: true },
+		},
+		{
+			path: '/moderation/user-management',
+			name: 'user-management',
+			component: UserManagementView,
+			meta: { requiresAuth: true, showAppNavbar: true },
+		},
+		{
+			path: '/moderation/user-management/:id',
+			name: 'user-detail',
+			component: UserDetailView,
 			meta: { requiresAuth: true, showAppNavbar: true },
 		},
 		{
