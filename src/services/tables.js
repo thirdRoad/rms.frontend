@@ -1,7 +1,7 @@
 import { api } from '@/api/client'
 
 class TablesService {
-	async getTablesList() {
+	async getTableList() {
 		const response = await api.get('/tables/')
 		return response.data.data
 	}
@@ -11,11 +11,7 @@ class TablesService {
 	}
 
 	async createTable(body) {
-		await api.post('/tables/', body, {
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		})
+		await api.post('/tables/', body)
 	}
 }
 

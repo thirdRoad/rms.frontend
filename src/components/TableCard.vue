@@ -11,13 +11,7 @@ defineProps({
 	<div class="table-card">
 		<div class="card-top">
 			<span class="table-title">Table #{{ table.id }}</span>
-			<span
-				class="status-badge"
-				:class="{
-					occupied: table.status?.toLowerCase() === 'occupied' || table.status === true,
-					available: table.status?.toLowerCase() === 'available' || table.status === false,
-				}"
-			>
+			<span class="status-badge" :class="table.status">
 				{{ table.status }}
 			</span>
 		</div>
@@ -75,5 +69,10 @@ defineProps({
 .status-badge.occupied {
 	background-color: #fff1f2;
 	color: #e11d48;
+}
+
+.status-badge.reserved {
+	background-color: #fffbeb;
+	color: #d97706;
 }
 </style>
