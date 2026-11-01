@@ -9,6 +9,9 @@ import AddProductView from '@/views/AddProductView.vue'
 import ProductDetailView from '@/views/ProductDetailView.vue'
 import ProductEditView from '@/views/ProductEditView.vue'
 import KitchenView from '@/views/KitchenView.vue'
+import ModerationView from '@/views/ModerationView.vue'
+import UserManagementView from '@/views/UserManagementView.vue'
+import UserDetailView from '@/views/UserDetailView.vue'
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,9 +47,21 @@ const router = createRouter({
 			meta: { requiresAuth: true, showAppNavbar: true },
 		},
 		{
-			path: '/modaration',
-			name: 'modaration',
-			component: EmptyView,
+			path: '/moderation',
+			name: 'moderation',
+			component: ModerationView,
+			meta: { requiresAuth: true, showAppNavbar: true },
+		},
+		{
+			path: '/moderation/user-management',
+			name: 'user-management',
+			component: UserManagementView,
+			meta: { requiresAuth: true, showAppNavbar: true },
+		},
+		{
+			path: '/moderation/user-management/:id',
+			name: 'user-detail',
+			component: UserDetailView,
 			meta: { requiresAuth: true, showAppNavbar: true },
 		},
 		{
