@@ -4,9 +4,13 @@ defineProps({
 		type: Boolean,
 		default: false,
 	},
-	productName: {
+	itemName: {
 		type: String,
-		default: 'this product',
+		default: 'this item',
+	},
+	title: {
+		type: String,
+		default: 'Delete Item?',
 	},
 })
 
@@ -20,11 +24,11 @@ const emit = defineEmits(['confirm', 'cancel'])
 				<span>!</span>
 			</div>
 
-			<h2>Delete Product?</h2>
+			<h2>{{ title }}</h2>
 
 			<p>
 				Are you sure you want to delete
-				<strong>{{ productName }}</strong
+				<strong>{{ itemName }}</strong
 				>? This action cannot be undone.
 			</p>
 
