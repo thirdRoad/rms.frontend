@@ -2,13 +2,37 @@
 import { ref, onMounted } from 'vue'
 import { tablesService } from '@/services/tables'
 import TableCard from '@/components/TableCard.vue'
+import AppToast from '@/components/AppToast.vue'
 import { RouterLink } from 'vue-router'
 
 const tables = ref([])
+const isToastVisible = ref(false)
+const isCreating = ref(false)
 
 const fetchTables = async () => {
 	const data = await tablesService.getTableList()
 	tables.value = data
+}
+
+function showToast() {
+	isToastVisible.value = true
+	setTimeout(() => {
+		isToastVisible.value = false
+	}, 1500)
+}
+
+async function createTable() {
+	isCreating.value = true
+
+	try {
+		const createdTable = await tablesService.createTable()
+		tables.value.push(createdTable)
+		showToast()
+	} catch (error) {
+		console.error(error)
+	} finally {
+		isCreating.value = false
+	}
 }
 
 onMounted(() => {
@@ -20,8 +44,12 @@ onMounted(() => {
 	<div class="tables-container">
 		<div class="tables-wrapper">
 			<div class="page-header">
-				<h1>Tables Management</h1>
-				<p>Monitor table status and active layouts</p>
+				<div class="header-titles">
+					<h1>Tables Management</h1>
+					<p>Monitor table status and active layouts</p>
+				</div>
+
+				<button class="action-btn" :disabled="isCreating" @click="createTable">Add Table</button>
 			</div>
 
 			<main class="tables-scroll-area">
@@ -37,6 +65,8 @@ onMounted(() => {
 				</div>
 			</main>
 		</div>
+
+		<AppToast v-if="isToastVisible" title="Success" message="Table created" />
 	</div>
 </template>
 
@@ -59,7 +89,32 @@ onMounted(() => {
 }
 
 .page-header {
-	text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 1rem;
+}
+
+.action-btn {
+	padding: 0.7rem 1.25rem;
+	border: none;
+	border-radius: 8px;
+	background-color: #e11d48;
+	color: #ffffff;
+	font-size: 0.9rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+}
+
+.action-btn:hover {
+	background-color: #be123c;
+}
+
+.action-btn:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
 }
 
 .page-header h1 {
