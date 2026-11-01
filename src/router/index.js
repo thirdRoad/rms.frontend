@@ -39,7 +39,7 @@ const router = createRouter({
 			component: TablesView,
 			meta: { requiresAuth: true, showAppNavbar: true },
 		},
-		{	
+		{
 			path: '/tables/:id',
 			name: 'table-detail',
 			component: TableDetailView,
