@@ -1,8 +1,8 @@
 <script setup>
-import UserCard from '@/components/UserCard.vue'
-import RoleFilter from '@/components/RoleFilter.vue'
-import CreateUserModal from '@/components/CreateUserModal.vue'
-import { userManagementService } from '@/services/user-management'
+import UserCard from '@/components/user/UserCard.vue'
+import RoleFilter from '@/components/user/RoleFilter.vue'
+import CreateUserModal from '@/components/user/CreateUserModal.vue'
+import { userService } from '@/services/user'
 import { ref, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 
@@ -11,15 +11,15 @@ const showCreateModal = ref(false)
 const isCreating = ref(false)
 
 onMounted(async () => {
-	users.value = await userManagementService.getUserList()
+	users.value = await userService.getUserList()
 })
 
 async function createUser(data) {
 	isCreating.value = true
 
 	try {
-		await userManagementService.createUser(data)
-		users.value = await userManagementService.getUserList()
+		await userService.createUser(data)
+		users.value = await userService.getUserList()
 		showCreateModal.value = false
 	} catch (error) {
 		console.error(error)

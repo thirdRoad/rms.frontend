@@ -1,28 +1,59 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { productsService } from '@/services/products'
-import ProductCard from '@/components/ProductCard.vue'
-import CategoryFilter from '@/components/CategoryFilter.vue'
-import { useRouter, RouterLink } from 'vue-router'
+import { RouterLink } from 'vue-router'
+import { productService } from '@/services/product'
+import { categoryService } from '@/services/category'
+import ProductCard from '@/components/product/ProductCard.vue'
+import CategoryFilter from '@/components/category/CategoryFilter.vue'
+import CreateProductModal from '@/components/product/CreateProductModal.vue'
+import CreateCategoryModal from '@/components/category/CreateCategoryModal.vue'
 
-const router = useRouter()
 const products = ref([])
+const categories = ref([])
+
+const showProductModal = ref(false)
+const showCategoryModal = ref(false)
+const isCreating = ref(false)
 
 const fetchProducts = async () => {
-	const data = await productsService.getProductList()
-	products.value = data
+	products.value = await productService.getProductList()
 }
 
-const goToAddCategory = () => {
-	router.push({ name: 'add-category' })
+const fetchCategories = async () => {
+	categories.value = await categoryService.getCategoryList()
 }
 
-const goToAddProduct = () => {
-	router.push({ name: 'add-product' })
+const createProduct = async (data) => {
+	isCreating.value = true
+
+	try {
+		await productService.createProduct(data)
+		await fetchProducts()
+		showProductModal.value = false
+	} catch (error) {
+		console.error(error)
+	} finally {
+		isCreating.value = false
+	}
+}
+
+const createCategory = async (data) => {
+	isCreating.value = true
+
+	try {
+		await categoryService.createCategory(data)
+		await fetchCategories()
+		showCategoryModal.value = false
+	} catch (error) {
+		console.error(error)
+	} finally {
+		isCreating.value = false
+	}
 }
 
 onMounted(() => {
 	fetchProducts()
+	fetchCategories()
 })
 </script>
 
@@ -36,14 +67,16 @@ onMounted(() => {
 				</div>
 
 				<div class="actions">
-					<button @click="goToAddProduct" class="action-btn">Add Product</button>
-					<button @click="goToAddCategory" class="action-btn secondary">Add Category</button>
+					<button class="action-btn" @click="showProductModal = true">Add Product</button>
+					<button class="action-btn secondary" @click="showCategoryModal = true">
+						Add Category
+					</button>
 				</div>
 			</div>
 
 			<div class="content-layout">
 				<aside class="sidebar-section">
-					<CategoryFilter />
+					<CategoryFilter :categories="categories" />
 				</aside>
 
 				<main class="products-scroll-area">
@@ -51,7 +84,7 @@ onMounted(() => {
 						<RouterLink
 							v-for="product in products"
 							:key="product.id"
-							:to="`/products/${product.id}`"
+							:to="{ name: 'product-detail', params: { id: product.id } }"
 							class="product-card-link"
 						>
 							<ProductCard :product="product" />
@@ -60,6 +93,21 @@ onMounted(() => {
 				</main>
 			</div>
 		</div>
+
+		<CreateProductModal
+			:show="showProductModal"
+			:loading="isCreating"
+			:categories="categories"
+			@submit="createProduct"
+			@close="showProductModal = false"
+		/>
+
+		<CreateCategoryModal
+			:show="showCategoryModal"
+			:loading="isCreating"
+			@submit="createCategory"
+			@close="showCategoryModal = false"
+		/>
 	</div>
 </template>
 

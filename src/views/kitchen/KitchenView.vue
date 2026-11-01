@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import OrderCard from '@/components/OrderCard.vue'
+import OrderCard from '@/components/order/OrderCard.vue'
 import { orderService } from '@/services/order'
 
 const orders = ref([])

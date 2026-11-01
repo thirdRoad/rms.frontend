@@ -7,11 +7,8 @@ class CategoryService {
 	}
 
 	async createCategory(body) {
-		await api.post('/categories/', body, {
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		})
+		const response = await api.post('/categories/', body)
+		return response.data.data
 	}
 }
 

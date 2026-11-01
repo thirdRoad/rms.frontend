@@ -1,6 +1,6 @@
 import { api } from '@/api/client'
 
-class TablesService {
+class TableService {
 	async getTableList() {
 		const response = await api.get('/tables/')
 		return response.data.data
@@ -16,4 +16,4 @@ class TablesService {
 	}
 }
 
-export const tablesService = new TablesService()
+export const tableService = new TableService()
