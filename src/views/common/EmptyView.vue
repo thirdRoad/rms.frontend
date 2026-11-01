@@ -1,5 +1,5 @@
 <template>
-	<RouterLink to="/">Go Home </RouterLink>
+	<RouterLink :to="{ name: 'home' }">Go Home </RouterLink>
 	<div>
 		<h1>Example domains view</h1>
 	</div>

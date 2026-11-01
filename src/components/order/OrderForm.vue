@@ -1,8 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { productsService } from '@/services/products'
-import ProductCard from '@/components/ProductCard.vue'
-import SelectedProduct from '@/components/SelectedProduct.vue'
+import { productService } from '@/services/product'
+import ProductCard from '@/components/product/ProductCard.vue'
+import SelectedProduct from '@/components/order/SelectedProduct.vue'
 
 defineProps({
 	loading: { type: Boolean, default: false },
@@ -15,7 +15,7 @@ const selectedProduct = ref(null)
 const orderItems = ref([])
 
 onMounted(async () => {
-	products.value = await productsService.getProductList()
+	products.value = await productService.getProductList()
 })
 
 const selectProduct = (product) => {

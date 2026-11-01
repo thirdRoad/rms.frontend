@@ -1,11 +1,11 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { tablesService } from '@/services/tables'
+import { tableService } from '@/services/table'
 import { orderService } from '@/services/order'
 import { authService } from '@/services/auth'
-import TablesDetailCard from '@/components/TablesDetailCard.vue'
-import OrderForm from '@/components/OrderForm.vue'
+import TableDetail from '@/components/table/TableDetail.vue'
+import OrderForm from '@/components/order/OrderForm.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -15,7 +15,7 @@ const isOrdering = ref(false)
 const isCreating = ref(false)
 
 const fetchTable = async (id) => {
-	table.value = await tablesService.getTable(id)
+	table.value = await tableService.getTable(id)
 }
 
 const createOrder = async (items) => {
@@ -58,7 +58,7 @@ watch(
 				<button class="back-btn" @click="router.push({ name: 'tables' })">← Back to Tables</button>
 			</div>
 
-			<TablesDetailCard
+			<TableDetail
 				v-if="table"
 				:table="table"
 				@order="isOrdering = true"

@@ -1,22 +1,22 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { userManagementService } from '@/services/user-management'
-import UserDetail from '@/components/UserDetail.vue'
-import UserEditForm from '@/components/UserEditForm.vue'
-import DeleteConfirmModal from '@/components/DeleteConfirmModal.vue'
+import { userService } from '@/services/user'
+import UserDetail from '@/components/user/UserDetail.vue'
+import EditUserModal from '@/components/user/EditUserModal.vue'
+import DeleteConfirmModal from '@/components/common/DeleteConfirmModal.vue'
 
 const route = useRoute()
 const router = useRouter()
 
 const user = ref(null)
-const isEditing = ref(false)
+const showEditModal = ref(false)
 const isSaving = ref(false)
 const showDeleteModal = ref(false)
 
 const fetchUser = async (id) => {
 	try {
-		user.value = await userManagementService.getUser(id)
+		user.value = await userService.getUser(id)
 	} catch (error) {
 		console.error(error)
 	}
@@ -26,9 +26,9 @@ const updateUser = async (data) => {
 	isSaving.value = true
 
 	try {
-		await userManagementService.updateUser(route.params.id, data)
+		await userService.updateUser(route.params.id, data)
 		await fetchUser(route.params.id)
-		isEditing.value = false
+		showEditModal.value = false
 	} catch (error) {
 		console.error(error)
 	} finally {
@@ -38,9 +38,9 @@ const updateUser = async (data) => {
 
 const deleteUser = async () => {
 	try {
-		await userManagementService.deleteUser(route.params.id)
+		await userService.deleteUser(route.params.id)
 		showDeleteModal.value = false
-		router.push({ name: 'user-management' })
+		router.push({ name: 'users' })
 	} catch (error) {
 		console.error(error)
 	}
@@ -48,10 +48,7 @@ const deleteUser = async () => {
 
 watch(
 	() => route.params.id,
-	(id) => {
-		isEditing.value = false
-		fetchUser(id)
-	},
+	(id) => fetchUser(id),
 	{ immediate: true },
 )
 </script>
@@ -60,27 +57,25 @@ watch(
 	<div class="user-detail-view">
 		<div class="view-wrapper">
 			<div class="actions-header">
-				<button class="back-btn" @click="router.push({ name: 'user-management' })">
-					← Back to Users
-				</button>
+				<button class="back-btn" @click="router.push({ name: 'users' })">← Back to Users</button>
 
-				<div v-if="user && !isEditing" class="action-buttons">
-					<button class="edit-btn" @click="isEditing = true">Edit User</button>
+				<div v-if="user" class="action-buttons">
+					<button class="edit-btn" @click="showEditModal = true">Edit User</button>
 					<button class="delete-btn" @click="showDeleteModal = true">Delete User</button>
 				</div>
 			</div>
 
-			<template v-if="user">
-				<UserDetail v-if="!isEditing" :user="user" />
-				<UserEditForm
-					v-else
-					:user="user"
-					:loading="isSaving"
-					@submit="updateUser"
-					@cancel="isEditing = false"
-				/>
-			</template>
+			<UserDetail v-if="user" :user="user" />
 		</div>
+
+		<EditUserModal
+			v-if="user"
+			:show="showEditModal"
+			:loading="isSaving"
+			:user="user"
+			@submit="updateUser"
+			@close="showEditModal = false"
+		/>
 
 		<DeleteConfirmModal
 			:show="showDeleteModal"
