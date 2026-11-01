@@ -46,8 +46,7 @@ class OrderService {
 		try {
 			await api.post(`/orders/${orderId}/done`)
 			return true
-		} catch (error) {
-			console.log(error)
+		} catch {
 			return false
 		}
 	}
@@ -56,8 +55,7 @@ class OrderService {
 		try {
 			await api.post(`/orders/${orderId}/cancelled`)
 			return true
-		} catch (error) {
-			console.log(error)
+		} catch {
 			return false
 		}
 	}

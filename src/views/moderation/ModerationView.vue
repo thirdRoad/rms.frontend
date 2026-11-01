@@ -11,7 +11,7 @@ import { RouterLink } from 'vue-router'
 			</div>
 
 			<div class="modules-grid">
-				<RouterLink to="/moderation/user-management" class="card-btn">
+				<RouterLink :to="{ name: 'users' }" class="card-btn">
 					<div class="card-content">
 						<span class="card-title">User Management</span>
 						<span class="card-desc">Add, edit and remove users</span>

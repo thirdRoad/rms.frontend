@@ -1,23 +1,15 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import { categoryService } from '@/services/category'
+import { ref } from 'vue'
 
-const categories = ref([])
+defineProps({
+	categories: { type: Array, default: () => [] },
+})
+
 const selectedCategoryId = ref(null) // Optional state to handle active click highlight
-
-const fetchCategories = async () => {
-	const data = await categoryService.getCategoryList()
-	categories.value = data
-	console.log('categories', data)
-}
 
 const selectCategory = (id) => {
 	selectedCategoryId.value = id
 }
-
-onMounted(() => {
-	fetchCategories()
-})
 </script>
 
 <template>
