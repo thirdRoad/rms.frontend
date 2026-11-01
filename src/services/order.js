@@ -5,6 +5,10 @@ class OrderService {
 		const response = await api.get('/orders/')
 		return response.data.data
 	}
+	async createOrder(data) {
+		const response = await api.post('/orders/', data)
+		return response.data
+	}
 
 	async getOrderItems(orderId) {
 		try {
