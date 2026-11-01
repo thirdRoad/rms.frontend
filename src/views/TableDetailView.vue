@@ -1,35 +1,52 @@
 <script setup>
 import { ref, watch } from 'vue'
-import { tablesService } from '@/services/tables'
-import TablesDetailCard from '@/components/TablesDetailCard.vue'
 import { useRoute, useRouter } from 'vue-router'
+import { tablesService } from '@/services/tables'
+import { orderService } from '@/services/order'
+import { authService } from '@/services/auth'
+import TablesDetailCard from '@/components/TablesDetailCard.vue'
+import OrderForm from '@/components/OrderForm.vue'
 
 const route = useRoute()
 const router = useRouter()
 
 const table = ref(null)
+const isOrdering = ref(false)
+const isCreating = ref(false)
 
 const fetchTable = async (id) => {
-	const data = await tablesService.getTable(id)
-	table.value = data
+	table.value = await tablesService.getTable(id)
 }
 
-const handleOrder = () => {
-	router.push({
-		name: 'order-new',
-		params: {
-			id: route.params.id,
-		},
-	})
+const createOrder = async (items) => {
+	isCreating.value = true
+
+	try {
+		const me = await authService.getMe()
+
+		await orderService.createOrder({
+			user_id: me.id,
+			table_id: table.value.id,
+			items: items,
+		})
+		router.push({ name: 'tables' })
+	} catch (error) {
+		console.error(error)
+	} finally {
+		isCreating.value = false
+	}
 }
 
 const handleChangeTable = () => {
-	console.log('Change table for:', table.value.id)
+	// TODO: needs backend support
 }
 
 watch(
 	() => route.params.id,
-	(id) => fetchTable(id),
+	(id) => {
+		isOrdering.value = false
+		fetchTable(id)
+	},
 	{ immediate: true },
 )
 </script>
@@ -44,8 +61,15 @@ watch(
 			<TablesDetailCard
 				v-if="table"
 				:table="table"
-				@order="handleOrder"
+				@order="isOrdering = true"
 				@change-table="handleChangeTable"
+			/>
+
+			<OrderForm
+				v-if="table && isOrdering"
+				:loading="isCreating"
+				@submit="createOrder"
+				@cancel="isOrdering = false"
 			/>
 		</div>
 	</div>
@@ -56,7 +80,6 @@ watch(
 	min-height: calc(100vh - 70px);
 	display: flex;
 	justify-content: center;
-	align-items: center;
 	padding: 2.5rem 1.5rem;
 	background-color: #f9fafb;
 	box-sizing: border-box;
@@ -64,7 +87,7 @@ watch(
 
 .view-wrapper {
 	width: 100%;
-	max-width: 700px;
+	max-width: 1200px;
 	display: flex;
 	flex-direction: column;
 	gap: 1.25rem;

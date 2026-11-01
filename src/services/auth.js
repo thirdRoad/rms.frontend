@@ -14,6 +14,11 @@ class AuthService {
 		return response.data
 	}
 
+	async getMe() {
+		const response = await api.get('/auth/me')
+		return response.data.data
+	}
+
 	async logout() {
 		try {
 			await api.post('/auth/logout', {})

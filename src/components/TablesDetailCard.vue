@@ -14,13 +14,7 @@ const emit = defineEmits(['order', 'change-table'])
 		<div class="table-info">
 			<div class="card-header">
 				<h2>Table #{{ table.id }}</h2>
-				<span
-					class="status-badge"
-					:class="{
-						occupied: table.status?.toLowerCase() === 'occupied' || table.status === true,
-						available: table.status?.toLowerCase() === 'available' || table.status === false,
-					}"
-				>
+				<span class="status-badge" :class="table.status">
 					{{ table.status }}
 				</span>
 			</div>
@@ -46,7 +40,6 @@ const emit = defineEmits(['order', 'change-table'])
 	background: #ffffff;
 	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 	width: 100%;
-	max-width: 700px;
 	box-sizing: border-box;
 }
 
@@ -87,6 +80,11 @@ const emit = defineEmits(['order', 'change-table'])
 .status-badge.occupied {
 	background-color: #fff1f2;
 	color: #e11d48;
+}
+
+.status-badge.reserved {
+	background-color: #fffbeb;
+	color: #d97706;
 }
 
 .table-meta {

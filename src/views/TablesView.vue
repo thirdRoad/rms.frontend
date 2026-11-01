@@ -7,7 +7,7 @@ import { RouterLink } from 'vue-router'
 const tables = ref([])
 
 const fetchTables = async () => {
-	const data = await tablesService.getTablesList()
+	const data = await tablesService.getTableList()
 	tables.value = data
 }
 
@@ -29,7 +29,7 @@ onMounted(() => {
 					<RouterLink
 						v-for="table in tables"
 						:key="table.id"
-						:to="`/tables/${table.id}`"
+						:to="{ name: 'table-detail', params: { id: table.id } }"
 						class="table-card-link"
 					>
 						<TableCard :table="table" />
