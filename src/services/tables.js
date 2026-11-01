@@ -10,8 +10,9 @@ class TablesService {
 		return response.data.data
 	}
 
-	async createTable(body) {
-		await api.post('/tables/', body)
+	async createTable() {
+		const response = await api.post('/tables/')
+		return response.data.data
 	}
 }
 
