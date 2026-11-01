@@ -1,41 +1,45 @@
 import { createRouter, createWebHistory } from 'vue-router'
-
-import HomeView from '@/views/HomeView.vue'
 import { authService } from '@/services/auth'
-import EmptyView from '@/views/EmptyView.vue'
-import ProductsView from '@/views/ProductsView.vue'
-import AddCategoryView from '@/views/AddCategoryView.vue'
-import AddProductView from '@/views/AddProductView.vue'
-import ProductDetailView from '@/views/ProductDetailView.vue'
-import ProductEditView from '@/views/ProductEditView.vue'
-import KitchenView from '@/views/KitchenView.vue'
-import TablesView from '@/views/TablesView.vue'
-import TableDetailView from '@/views/TableDetailView.vue'
-import ModerationView from '@/views/ModerationView.vue'
-import UserManagementView from '@/views/UserManagementView.vue'
-import UserDetailView from '@/views/UserDetailView.vue'
+
+import HomeView from '@/views/home/HomeView.vue'
+import TablesView from '@/views/table/TablesView.vue'
+import TableDetailView from '@/views/table/TableDetailView.vue'
+import ProductsView from '@/views/product/ProductsView.vue'
+import ProductDetailView from '@/views/product/ProductDetailView.vue'
+import KitchenView from '@/views/kitchen/KitchenView.vue'
+import ModerationView from '@/views/moderation/ModerationView.vue'
+import UsersView from '@/views/moderation/UsersView.vue'
+import UserDetailView from '@/views/moderation/UserDetailView.vue'
+import EmptyView from '@/views/common/EmptyView.vue'
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
 	routes: [
+		// Auth
+		{
+			path: '/login',
+			name: 'login',
+			component: () => import('@/views/auth/LoginView.vue'),
+			meta: { guestOnly: true },
+		},
+		{
+			path: '/logout',
+			name: 'logout',
+			beforeEnter: async () => {
+				await authService.logout()
+				return { name: 'login' }
+			},
+		},
+
+		// Home
 		{
 			path: '/',
 			name: 'home',
 			component: HomeView,
 			meta: { requiresAuth: true, showAppNavbar: true },
 		},
-		{
-			path: '/login',
-			name: 'login',
-			component: () => import('@/views/LoginView.vue'),
-			meta: { guestOnly: true },
-		},
-		{
-			path: '/products',
-			name: 'products',
-			component: ProductsView,
-			meta: { requiresAuth: true, showAppNavbar: true },
-		},
+
+		// Tables
 		{
 			path: '/tables',
 			name: 'tables',
@@ -48,46 +52,12 @@ const router = createRouter({
 			component: TableDetailView,
 			meta: { requiresAuth: true, showAppNavbar: true },
 		},
+
+		// Products
 		{
-			path: '/cash',
-			name: 'cash',
-			component: EmptyView,
-			meta: { requiresAuth: true, showAppNavbar: true },
-		},
-		{
-			path: '/moderation',
-			name: 'moderation',
-			component: ModerationView,
-			meta: { requiresAuth: true, showAppNavbar: true },
-		},
-		{
-			path: '/moderation/user-management',
-			name: 'user-management',
-			component: UserManagementView,
-			meta: { requiresAuth: true, showAppNavbar: true },
-		},
-		{
-			path: '/moderation/user-management/:id',
-			name: 'user-detail',
-			component: UserDetailView,
-			meta: { requiresAuth: true, showAppNavbar: true },
-		},
-		{
-			path: '/kitchen',
-			name: 'kitchen',
-			component: KitchenView,
-			meta: { requiresAuth: true, showAppNavbar: true },
-		},
-		{
-			path: '/categories/add',
-			name: 'add-category',
-			component: AddCategoryView,
-			meta: { requiresAuth: true, showAppNavbar: true },
-		},
-		{
-			path: '/products/add',
-			name: 'add-product',
-			component: AddProductView,
+			path: '/products',
+			name: 'products',
+			component: ProductsView,
 			meta: { requiresAuth: true, showAppNavbar: true },
 		},
 		{
@@ -96,27 +66,47 @@ const router = createRouter({
 			component: ProductDetailView,
 			meta: { requiresAuth: true, showAppNavbar: true },
 		},
+
+		// Kitchen
 		{
-			path: '/products/edit/:id',
-			name: 'product-edit',
-			component: ProductEditView,
+			path: '/kitchen',
+			name: 'kitchen',
+			component: KitchenView,
+			meta: { requiresAuth: true, showAppNavbar: true },
+		},
+
+		// Moderation
+		{
+			path: '/moderation',
+			name: 'moderation',
+			component: ModerationView,
 			meta: { requiresAuth: true, showAppNavbar: true },
 		},
 		{
-			path: '/logout',
-			name: 'logout',
-			beforeEnter: async () => {
-				try {
-					await authService.logout()
-				} catch (error) {
-					console.error('we have trouble logout', error)
-				}
-				return { name: 'login' }
-			},
+			path: '/moderation/users',
+			name: 'users',
+			component: UsersView,
+			meta: { requiresAuth: true, showAppNavbar: true },
 		},
 		{
+			path: '/moderation/users/:id',
+			name: 'user-detail',
+			component: UserDetailView,
+			meta: { requiresAuth: true, showAppNavbar: true },
+		},
+
+		// Cash
+		{
+			path: '/cash',
+			name: 'cash',
+			component: EmptyView,
+			meta: { requiresAuth: true, showAppNavbar: true },
+		},
+
+		// Fallback: keep this last
+		{
 			path: '/:pathMatch(.*)*',
-			redirect: '/',
+			redirect: { name: 'home' },
 		},
 	],
 })

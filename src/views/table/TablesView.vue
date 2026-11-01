@@ -1,8 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { tablesService } from '@/services/tables'
-import TableCard from '@/components/TableCard.vue'
-import AppToast from '@/components/AppToast.vue'
+import { tableService } from '@/services/table'
+import TableCard from '@/components/table/TableCard.vue'
+import AppToast from '@/components/common/AppToast.vue'
 import { RouterLink } from 'vue-router'
 
 const tables = ref([])
@@ -10,7 +10,7 @@ const isToastVisible = ref(false)
 const isCreating = ref(false)
 
 const fetchTables = async () => {
-	const data = await tablesService.getTableList()
+	const data = await tableService.getTableList()
 	tables.value = data
 }
 
@@ -25,7 +25,7 @@ async function createTable() {
 	isCreating.value = true
 
 	try {
-		const createdTable = await tablesService.createTable()
+		const createdTable = await tableService.createTable()
 		tables.value.push(createdTable)
 		showToast()
 	} catch (error) {

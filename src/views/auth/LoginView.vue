@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { authService } from '@/services/auth'
-import LoginForm from '@/components/LoginForm.vue'
+import LoginForm from '@/components/common/LoginForm.vue'
 
 const router = useRouter()
 const loading = ref(false)

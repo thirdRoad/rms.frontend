@@ -1,35 +1,42 @@
 <script setup>
-import { reactive } from 'vue'
+import { reactive, watch } from 'vue'
 
 const props = defineProps({
-	product: {
-		type: Object,
-		required: true,
-	},
-	categories: {
-		type: Array,
-		default: () => [],
-	},
+	show: { type: Boolean, default: false },
+	loading: { type: Boolean, default: false },
+	categories: { type: Array, default: () => [] },
 })
 
-const emit = defineEmits(['submit-edit-product'])
+const emit = defineEmits(['submit', 'close'])
 
-const formData = reactive({
-	name: props.product.name ?? '',
-	price: props.product.price ?? '',
-	stock: props.product.stock ?? '',
-	category_id: props.product.category?.id ?? props.product.category_id ?? null,
-})
+const emptyForm = {
+	name: '',
+	price: null,
+	stock: null,
+	category_id: null,
+}
+
+const formData = reactive({ ...emptyForm })
+
+// Clear the form every time the modal is opened
+watch(
+	() => props.show,
+	(isOpen) => {
+		if (isOpen) {
+			Object.assign(formData, emptyForm)
+		}
+	},
+)
 
 const onSubmit = () => {
-	emit('submit-edit-product', { ...formData })
+	emit('submit', { ...formData })
 }
 </script>
 
 <template>
-	<div class="form-container">
-		<form class="editProduct-form" @submit.prevent="onSubmit">
-			<h3 class="form-title">Edit Product</h3>
+	<div v-if="show" class="modal-overlay" @click.self="emit('close')">
+		<form class="modal-content" @submit.prevent="onSubmit">
+			<h2>Add Product</h2>
 
 			<div class="form-group">
 				<label for="productName">Product Name</label>
@@ -71,50 +78,53 @@ const onSubmit = () => {
 				<label for="categoryId">Category</label>
 				<select id="categoryId" v-model="formData.category_id" required>
 					<option :value="null" disabled>Select a category</option>
-
 					<option v-for="category in categories" :key="category.id" :value="category.id">
 						{{ category.name }}
 					</option>
 				</select>
 			</div>
 
-			<button type="submit" class="submit-btn">Update Product</button>
+			<div class="modal-actions">
+				<button type="button" class="cancel-btn" @click="emit('close')">Cancel</button>
+				<button type="submit" class="submit-btn" :disabled="loading">
+					{{ loading ? 'Saving...' : 'Save' }}
+				</button>
+			</div>
 		</form>
 	</div>
 </template>
 
 <style scoped>
-.form-container {
+.modal-overlay {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.5);
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	padding: 1.5rem;
-	width: 100%;
+	z-index: 9999;
+	padding: 20px;
 }
 
-.editProduct-form {
-	background: #ffffff;
-	padding: 1.75rem;
-	border-radius: 12px;
-	border: 1.5px solid #e5e7eb;
-	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+.modal-content {
 	width: 100%;
 	max-width: 440px;
+	padding: 30px;
+	background: #ffffff;
+	border-radius: 14px;
+	box-shadow: 0 10px 35px rgba(0, 0, 0, 0.15);
 	box-sizing: border-box;
 }
 
-.form-title {
-	margin-top: 0;
-	margin-bottom: 1.25rem;
-	font-size: 1.25rem;
-	font-weight: 700;
+.modal-content h2 {
+	margin: 0 0 1.25rem;
 	color: #111827;
+	font-size: 22px;
 	text-align: center;
-	letter-spacing: -0.025em;
 }
 
 .form-group {
-	margin-bottom: 1.15rem;
+	margin-bottom: 1rem;
 }
 
 .form-group label {
@@ -130,52 +140,62 @@ const onSubmit = () => {
 	width: 100%;
 	padding: 0.75rem 1rem;
 	font-size: 0.95rem;
+	color: #1f2937;
+	background-color: #f9fafb;
 	border: 1.5px solid #e5e7eb;
 	border-radius: 8px;
 	outline: none;
-	transition: all 0.2s ease-in-out;
 	box-sizing: border-box;
-	background-color: #f9fafb;
-	color: #1f2937;
+	transition: all 0.2s ease-in-out;
 }
 
-.form-group select {
-	appearance: none;
-	background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-	background-repeat: no-repeat;
-	background-position: right 1rem center;
-	background-size: 1.1em;
-	padding-right: 2.5rem;
+.form-group input::placeholder {
+	color: #9ca3af;
 }
 
 .form-group input:focus,
 .form-group select:focus {
-	border-color: #dc2626;
+	border-color: #e11d48;
 	background-color: #ffffff;
-	box-shadow: 0 0 0 4px rgba(242, 122, 26, 0.1);
+	box-shadow: 0 0 0 4px rgba(225, 29, 72, 0.1);
+}
+
+.modal-actions {
+	display: flex;
+	gap: 12px;
+	margin-top: 1.5rem;
+}
+
+.modal-actions button {
+	flex: 1;
+	padding: 11px 18px;
+	border: none;
+	border-radius: 8px;
+	font-size: 14px;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.cancel-btn {
+	background: #f3f4f6;
+	color: #374151;
+}
+
+.cancel-btn:hover {
+	background: #e5e7eb;
 }
 
 .submit-btn {
-	width: 100%;
-	margin-top: 0.5rem;
-	padding: 0.85rem;
-	font-size: 1rem;
-	font-weight: 600;
+	background: #e11d48;
 	color: #ffffff;
-	background-color: #dc2626;
-	border: none;
-	border-radius: 8px;
-	cursor: pointer;
-	transition:
-		background-color 0.2s ease-in-out,
-		transform 0.1s ease;
 }
 
 .submit-btn:hover {
-	background-color: #dc2626;
+	background: #be123c;
 }
 
-.submit-btn:active {
-	transform: scale(0.99);
+.submit-btn:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
 }
 </style>

@@ -7,7 +7,7 @@
 			</div>
 
 			<div class="routes-grid">
-				<RouterLink to="/tables" class="card-btn">
+				<RouterLink :to="{ name: 'tables' }" class="card-btn">
 					<div class="card-content">
 						<span class="card-title">Tables</span>
 						<span class="card-desc">...</span>
@@ -15,7 +15,7 @@
 					<div class="card-arrow">→</div>
 				</RouterLink>
 
-				<RouterLink to="/products" class="card-btn">
+				<RouterLink :to="{ name: 'products' }" class="card-btn">
 					<div class="card-content">
 						<span class="card-title">Products</span>
 						<span class="card-desc">...</span>
@@ -23,7 +23,7 @@
 					<div class="card-arrow">→</div>
 				</RouterLink>
 
-				<RouterLink to="/kitchen" class="card-btn">
+				<RouterLink :to="{ name: 'kitchen' }" class="card-btn">
 					<div class="card-content">
 						<span class="card-title">Kitchen</span>
 						<span class="card-desc">...</span>
@@ -31,7 +31,7 @@
 					<div class="card-arrow">→</div>
 				</RouterLink>
 
-				<RouterLink to="/moderation" class="card-btn">
+				<RouterLink :to="{ name: 'moderation' }" class="card-btn">
 					<div class="card-content">
 						<span class="card-title">Modaration</span>
 						<span class="card-desc">...</span>
@@ -39,7 +39,7 @@
 					<div class="card-arrow">→</div>
 				</RouterLink>
 
-				<RouterLink to="/cash" class="card-btn full-width">
+				<RouterLink :to="{ name: 'cash' }" class="card-btn full-width">
 					<div class="card-content">
 						<span class="card-title">Cash</span>
 						<span class="card-desc">...</span>

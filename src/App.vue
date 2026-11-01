@@ -1,7 +1,7 @@
 <script setup>
 import { RouterView, useRoute } from 'vue-router'
 
-import AppNavbar from '@/components/AppNavbar.vue'
+import AppNavbar from '@/components/common/AppNavbar.vue'
 
 const route = useRoute()
 </script>

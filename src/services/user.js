@@ -1,6 +1,6 @@
 import { api } from '@/api/client'
 
-class UserManagementService {
+class UserService {
 	async getUserList() {
 		const response = await api.get('/users/')
 		return response.data.data
@@ -26,4 +26,4 @@ class UserManagementService {
 	}
 }
 
-export const userManagementService = new UserManagementService()
+export const userService = new UserService()

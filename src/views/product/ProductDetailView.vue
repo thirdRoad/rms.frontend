@@ -1,33 +1,49 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { productsService } from '@/services/products'
-import ProductDetail from '@/components/ProductDetail.vue'
-import DeleteConfirmModal from '@/components/DeleteConfirmModal.vue'
+import { productService } from '@/services/product'
+import ProductDetail from '@/components/product/ProductDetail.vue'
+import EditProductModal from '@/components/product/EditProductModal.vue'
+import DeleteConfirmModal from '@/components/common/DeleteConfirmModal.vue'
 
 const route = useRoute()
 const router = useRouter()
 
 const product = ref(null)
+const showEditModal = ref(false)
+const isSaving = ref(false)
 const showDeleteModal = ref(false)
 
 const fetchProduct = async (id) => {
-	product.value = await productsService.getProduct(id)
+	try {
+		product.value = await productService.getProduct(id)
+	} catch (error) {
+		console.error(error)
+	}
 }
 
-const handleDelete = async () => {
-	await productsService.deleteProduct(route.params.id)
-	showDeleteModal.value = false
-	router.push({ name: 'products' })
+const updateProduct = async (data) => {
+	isSaving.value = true
+
+	try {
+		await productService.updateProduct(route.params.id, data)
+		await fetchProduct(route.params.id)
+		showEditModal.value = false
+	} catch (error) {
+		console.error(error)
+	} finally {
+		isSaving.value = false
+	}
 }
 
-const handleEdit = () => {
-	router.push({
-		name: 'product-edit',
-		params: {
-			id: route.params.id,
-		},
-	})
+const deleteProduct = async () => {
+	try {
+		await productService.deleteProduct(route.params.id)
+		showDeleteModal.value = false
+		router.push({ name: 'products' })
+	} catch (error) {
+		console.error(error)
+	}
 }
 
 watch(
@@ -45,23 +61,31 @@ watch(
 					← Back to Products
 				</button>
 
-				<div class="action-buttons" v-if="product">
-					<button class="edit-btn" @click="handleEdit">Edit Product</button>
-
+				<div v-if="product" class="action-buttons">
+					<button class="edit-btn" @click="showEditModal = true">Edit Product</button>
 					<button class="delete-btn" @click="showDeleteModal = true">Delete Product</button>
-
-					<DeleteConfirmModal
-						:show="showDeleteModal"
-						:item-name="product?.name"
-						title="Delete Product?"
-						@confirm="handleDelete"
-						@cancel="showDeleteModal = false"
-					/>
 				</div>
 			</div>
 
 			<ProductDetail v-if="product" :product="product" />
 		</div>
+
+		<EditProductModal
+			v-if="product"
+			:show="showEditModal"
+			:loading="isSaving"
+			:product="product"
+			@submit="updateProduct"
+			@close="showEditModal = false"
+		/>
+
+		<DeleteConfirmModal
+			:show="showDeleteModal"
+			:item-name="product?.name"
+			title="Delete Product?"
+			@confirm="deleteProduct"
+			@cancel="showDeleteModal = false"
+		/>
 	</div>
 </template>
 

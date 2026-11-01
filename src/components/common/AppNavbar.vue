@@ -16,23 +16,26 @@ const isModerationActive = computed(() => route.path.startsWith('/moderation'))
 			</div>
 
 			<ul class="nav-routes">
-				<li><RouterLink to="/">Home</RouterLink></li>
-				<li><RouterLink to="/tables">Tables</RouterLink></li>
-				<li><RouterLink to="/products">Products</RouterLink></li>
-				<li><RouterLink to="/kitchen">Kitchen</RouterLink></li>
+				<li><RouterLink :to="{ name: 'home' }">Home</RouterLink></li>
+				<li><RouterLink :to="{ name: 'tables' }">Tables</RouterLink></li>
+				<li><RouterLink :to="{ name: 'products' }">Products</RouterLink></li>
+				<li><RouterLink :to="{ name: 'kitchen' }">Kitchen</RouterLink></li>
 				<li class="has-dropdown">
-					<RouterLink to="/moderation" :class="{ 'router-link-active': isModerationActive }">
+					<RouterLink
+						:to="{ name: 'moderation' }"
+						:class="{ 'router-link-active': isModerationActive }"
+					>
 						Moderation ▾
 					</RouterLink>
 
 					<ul class="dropdown">
 						<li>
-							<RouterLink :to="{ name: 'user-management' }">User Management</RouterLink>
+							<RouterLink :to="{ name: 'users' }">User Management</RouterLink>
 						</li>
 					</ul>
 				</li>
-				<li><RouterLink to="/cash">Cash</RouterLink></li>
-				<li><RouterLink to="/logout">Logout</RouterLink></li>
+				<li><RouterLink :to="{ name: 'cash' }">Cash</RouterLink></li>
+				<li><RouterLink :to="{ name: 'logout' }">Logout</RouterLink></li>
 			</ul>
 		</nav>
 	</header>
