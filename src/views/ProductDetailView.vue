@@ -52,7 +52,8 @@ watch(
 
 					<DeleteConfirmModal
 						:show="showDeleteModal"
-						:product-name="product?.name"
+						:item-name="product?.name"
+						title="Delete Product?"
 						@confirm="handleDelete"
 						@cancel="showDeleteModal = false"
 					/>
