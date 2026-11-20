@@ -7,6 +7,7 @@ import ProductCard from '@/components/product/ProductCard.vue'
 import CategoryFilter from '@/components/category/CategoryFilter.vue'
 import CreateProductModal from '@/components/product/CreateProductModal.vue'
 import CreateCategoryModal from '@/components/category/CreateCategoryModal.vue'
+import SearchBox from '@/components/product/SearchBox.vue'
 
 const products = ref([])
 const categories = ref([])
@@ -14,9 +15,25 @@ const categories = ref([])
 const showProductModal = ref(false)
 const showCategoryModal = ref(false)
 const isCreating = ref(false)
+const selectedCategoryId = ref(null)
+const searchValue = ref('')
 
 const fetchProducts = async () => {
-	products.value = await productService.getProductList()
+	const params = {}
+	if (selectedCategoryId.value) params.category = selectedCategoryId.value
+	if (searchValue.value.trim()) params.name = searchValue.value.trim()
+	console.log(params)
+	products.value = await productService.getProductList(params)
+}
+
+const handleCategorySelect = async (id) => {
+	selectedCategoryId.value = id
+	await fetchProducts()
+}
+
+const handleSearchValue = async (value) => {
+	searchValue.value = value
+	await fetchProducts()
 }
 
 const fetchCategories = async () => {
@@ -66,6 +83,10 @@ onMounted(() => {
 					<p>Manage your menu items and product list</p>
 				</div>
 
+				<div class="search-section">
+					<SearchBox @search="handleSearchValue" />
+				</div>
+
 				<div class="actions">
 					<button class="action-btn" @click="showProductModal = true">Add Product</button>
 					<button class="action-btn secondary" @click="showCategoryModal = true">
@@ -76,11 +97,11 @@ onMounted(() => {
 
 			<div class="content-layout">
 				<aside class="sidebar-section">
-					<CategoryFilter :categories="categories" />
+					<CategoryFilter :categories="categories" @select="handleCategorySelect" />
 				</aside>
 
 				<main class="products-scroll-area">
-					<div class="products-grid">
+					<div v-if="products.length > 0" class="products-grid">
 						<RouterLink
 							v-for="product in products"
 							:key="product.id"
@@ -89,6 +110,10 @@ onMounted(() => {
 						>
 							<ProductCard :product="product" />
 						</RouterLink>
+					</div>
+
+					<div v-else class="empty-state">
+						<p>No products found.</p>
 					</div>
 				</main>
 			</div>
@@ -149,6 +174,11 @@ onMounted(() => {
 	font-size: 0.95rem;
 	color: #6b7280;
 	margin-top: 0.4rem;
+}
+
+.search-section {
+	display: flex;
+	align-items: center;
 }
 
 .actions {
@@ -234,6 +264,21 @@ onMounted(() => {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
 	gap: 1.25rem;
+}
+
+.empty-state {
+	background-color: #ffffff;
+	border: 1.5px dashed #e5e7eb;
+	border-radius: 12px;
+	padding: 3rem 1.5rem;
+	text-align: center;
+	color: #6b7280;
+	font-size: 0.95rem;
+	font-weight: 500;
+}
+
+.empty-state p {
+	margin: 0;
 }
 
 .product-card-link {
