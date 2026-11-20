@@ -1,8 +1,8 @@
 import { api } from '@/api/client'
 
 class ProductService {
-	async getProductList() {
-		const response = await api.get('/products/')
+	async getProductList(params = {}) {
+		const response = await api.get('/products/', { params })
 		return response.data.data
 	}
 
