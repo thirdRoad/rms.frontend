@@ -5,10 +5,13 @@ defineProps({
 	categories: { type: Array, default: () => [] },
 })
 
-const selectedCategoryId = ref(null) // Optional state to handle active click highlight
+const emit = defineEmits(['select'])
+
+const selectedCategoryId = ref(null)
 
 const selectCategory = (id) => {
 	selectedCategoryId.value = id
+	emit('select', id)
 }
 </script>
 

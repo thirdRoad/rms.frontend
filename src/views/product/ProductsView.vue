@@ -7,6 +7,9 @@ import ProductCard from '@/components/product/ProductCard.vue'
 import CategoryFilter from '@/components/category/CategoryFilter.vue'
 import CreateProductModal from '@/components/product/CreateProductModal.vue'
 import CreateCategoryModal from '@/components/category/CreateCategoryModal.vue'
+import SearchBox from '@/components/common/SearchBox.vue'
+import SortSelect from '@/components/common/SortSelect.vue'
+import ValueNotFound from '@/components/common/ValueNotFound.vue'
 
 const products = ref([])
 const categories = ref([])
@@ -14,9 +17,40 @@ const categories = ref([])
 const showProductModal = ref(false)
 const showCategoryModal = ref(false)
 const isCreating = ref(false)
+const selectedCategoryId = ref(null)
+const searchValue = ref('')
+const sortValue = ref('')
+
+const sortOptions = [
+	{ label: 'Newest', value: '-created_at' },
+	{ label: 'Oldest', value: 'created_at' },
+	{ label: 'Product name (A-Z)', value: 'name' },
+	{ label: 'Product name (Z-A)', value: '-name' },
+	{ label: 'Increasing in price', value: 'price' },
+	{ label: 'Decreasing in price', value: '-price' },
+]
 
 const fetchProducts = async () => {
-	products.value = await productService.getProductList()
+	const params = {}
+	if (selectedCategoryId.value) params.category = selectedCategoryId.value
+	if (searchValue.value.trim()) params.name = searchValue.value.trim()
+	if (sortValue.value) params.sort = sortValue.value
+	products.value = await productService.getProductList(params)
+}
+
+const handleCategorySelect = async (id) => {
+	selectedCategoryId.value = id
+	await fetchProducts()
+}
+
+const handleSearch = async (value) => {
+	searchValue.value = value
+	await fetchProducts()
+}
+
+const handleSort = async (value) => {
+	sortValue.value = value
+	await fetchProducts()
 }
 
 const fetchCategories = async () => {
@@ -66,6 +100,15 @@ onMounted(() => {
 					<p>Manage your menu items and product list</p>
 				</div>
 
+				<div class="toolbar">
+					<SearchBox
+						placeholder="Search by product name..."
+						label="Search products"
+						@search="handleSearch"
+					/>
+					<SortSelect :options="sortOptions" label="Sort products" @sort="handleSort" />
+				</div>
+
 				<div class="actions">
 					<button class="action-btn" @click="showProductModal = true">Add Product</button>
 					<button class="action-btn secondary" @click="showCategoryModal = true">
@@ -76,11 +119,11 @@ onMounted(() => {
 
 			<div class="content-layout">
 				<aside class="sidebar-section">
-					<CategoryFilter :categories="categories" />
+					<CategoryFilter :categories="categories" @select="handleCategorySelect" />
 				</aside>
 
 				<main class="products-scroll-area">
-					<div class="products-grid">
+					<div v-if="products.length > 0" class="products-grid">
 						<RouterLink
 							v-for="product in products"
 							:key="product.id"
@@ -90,6 +133,12 @@ onMounted(() => {
 							<ProductCard :product="product" />
 						</RouterLink>
 					</div>
+
+					<ValueNotFound
+						v-else
+						title="No products found"
+						description="Try adjusting your search or category filter, or add a new product to the menu."
+					/>
 				</main>
 			</div>
 		</div>
@@ -149,6 +198,13 @@ onMounted(() => {
 	font-size: 0.95rem;
 	color: #6b7280;
 	margin-top: 0.4rem;
+}
+
+.toolbar {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 0.75rem;
 }
 
 .actions {
@@ -236,6 +292,21 @@ onMounted(() => {
 	gap: 1.25rem;
 }
 
+.empty-state {
+	background-color: #ffffff;
+	border: 1.5px dashed #e5e7eb;
+	border-radius: 12px;
+	padding: 3rem 1.5rem;
+	text-align: center;
+	color: #6b7280;
+	font-size: 0.95rem;
+	font-weight: 500;
+}
+
+.empty-state p {
+	margin: 0;
+}
+
 .product-card-link {
 	text-decoration: none;
 	color: inherit;
@@ -246,6 +317,10 @@ onMounted(() => {
 
 /* Responsive adjustment for tablet/mobile */
 @media (max-width: 768px) {
+	.toolbar {
+		width: 100%;
+	}
+
 	.content-layout {
 		flex-direction: column;
 	}

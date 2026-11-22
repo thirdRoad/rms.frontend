@@ -4,6 +4,7 @@ import RoleFilter from '@/components/user/RoleFilter.vue'
 import CreateUserModal from '@/components/user/CreateUserModal.vue'
 import SearchBox from '@/components/common/SearchBox.vue'
 import SortSelect from '@/components/common/SortSelect.vue'
+import ValueNotFound from '@/components/common/ValueNotFound.vue'
 import { userService } from '@/services/user'
 import { ref, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
@@ -97,7 +98,7 @@ async function createUser(data) {
 				<RoleFilter @role="filterByRole" />
 
 				<main class="users-main">
-					<div class="users-grid">
+					<div v-if="users.length > 0" class="users-grid">
 						<RouterLink
 							v-for="user in users"
 							:key="user.id"
@@ -107,6 +108,12 @@ async function createUser(data) {
 							<UserCard :user="user" />
 						</RouterLink>
 					</div>
+
+					<ValueNotFound
+						v-else
+						title="No users found"
+						description="Try adjusting your search or role filter, or add a new user ."
+					/>
 				</main>
 			</div>
 		</div>
