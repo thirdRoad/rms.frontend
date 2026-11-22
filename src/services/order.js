@@ -1,8 +1,8 @@
 import { api } from '@/api/client'
 
 class OrderService {
-	async getOrderList() {
-		const response = await api.get('/orders/')
+	async getOrderList(params = {}) {
+		const response = await api.get('/orders/', { params })
 		return response.data.data
 	}
 	async createOrder(data) {
@@ -22,8 +22,8 @@ class OrderService {
 		}
 	}
 
-	async createOrderObject() {
-		const orders = await this.getOrderList()
+	async createOrderObject(params = {}) {
+		const orders = await this.getOrderList(params)
 		const finalOrders = []
 
 		for (const order of orders) {
