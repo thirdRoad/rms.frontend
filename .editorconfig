@@ -1,8 +1,14 @@
 [*.{js,jsx,mjs,cjs,ts,tsx,mts,cts,vue,css,scss,sass,less,styl}]
 charset = utf-8
+# Also read by Prettier as "tabWidth" (not set in .prettierrc.json)
 indent_size = 2
+# Keep in sync with "useTabs" in .prettierrc.json
 indent_style = tab
+# Must stay true: Prettier always adds a final newline
 insert_final_newline = true
+# Must stay true: Prettier always trims trailing whitespace
 trim_trailing_whitespace = true
+# Keep in sync with "eol=lf" in .gitattributes; also read by Prettier as "endOfLine"
 end_of_line = lf
+# Keep in sync with "printWidth" in .prettierrc.json
 max_line_length = 100
