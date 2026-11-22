@@ -30,8 +30,8 @@ defineProps({
 
 				<div class="info-item">
 					<span class="info-label">Stock Quantity</span>
-					<span class="info-value stock-tag" :class="{ 'low-stock': product.stock <= 5 }">
-						{{ product.stock }} units
+					<span class="info-value stock-tag">
+						{{ product.stock != null ? `${product.stock} units` : '—' }}
 					</span>
 				</div>
 
@@ -124,10 +124,6 @@ defineProps({
 
 				&.stock-tag {
 					color: #059669;
-
-					&.low-stock {
-						color: #dc2626;
-					}
 				}
 
 				&.date-text {
