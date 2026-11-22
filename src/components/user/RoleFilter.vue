@@ -3,11 +3,18 @@ import { ref, onMounted } from 'vue'
 import { roleService } from '@/services/role'
 
 const roleList = ref([])
+const selectedRoleId = ref(null)
+
+const selectRole = (id) => {
+	selectedRoleId.value = id
+	emit('role', id)
+}
 
 const getRoleList = async () => {
 	roleList.value = await roleService.getRoleList()
 }
 
+const emit = defineEmits(['role'])
 onMounted(() => {
 	getRoleList()
 })
@@ -18,8 +25,16 @@ onMounted(() => {
 		<h3>Roles</h3>
 
 		<ul class="role-list">
-			<li class="role-item active">All Roles</li>
-			<li v-for="role in roleList" :key="role.id" class="role-item">
+			<li class="role-item" :class="{ active: selectedRoleId === null }" @click="selectRole(null)">
+				All Roles
+			</li>
+			<li
+				v-for="role in roleList"
+				:key="role.id"
+				class="role-item"
+				:class="{ active: selectedRoleId === role.id }"
+				@click="selectRole(role.id)"
+			>
 				{{ role.name }}
 			</li>
 		</ul>
@@ -61,6 +76,7 @@ onMounted(() => {
 	font-weight: 500;
 	color: #4b5563;
 	border-radius: 8px;
+	cursor: pointer;
 	transition: all 0.2s ease-in-out;
 }
 
