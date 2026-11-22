@@ -11,7 +11,7 @@ class TableService {
 	}
 
 	async createTable() {
-		const response = await api.post('/tables/')
+		const response = await api.post('/tables/', {})
 		return response.data.data
 	}
 }
