@@ -4,12 +4,13 @@ import RoleFilter from '@/components/user/RoleFilter.vue'
 import CreateUserModal from '@/components/user/CreateUserModal.vue'
 import SearchBox from '@/components/common/SearchBox.vue'
 import SortSelect from '@/components/common/SortSelect.vue'
-import ValueNotFound from '@/components/common/EmptyCard.vue'
+import EmptyCard from '@/components/common/EmptyCard.vue'
 import { userService } from '@/services/user'
 import { ref, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 
 const users = ref([])
+const hasLoaded = ref(false)
 const showCreateModal = ref(false)
 const isCreating = ref(false)
 
@@ -34,6 +35,7 @@ const fetchUsers = async () => {
 	if (searchValue.value) params.display_name = searchValue.value
 	if (sortValue.value) params.sort = sortValue.value
 	users.value = await userService.getUserList(params)
+	hasLoaded.value = true
 }
 
 onMounted(() => {
@@ -76,7 +78,7 @@ async function createUser(data) {
 			<div class="page-header">
 				<div class="header-titles">
 					<h1>User Management</h1>
-					<p>{{ users.length }} users</p>
+					<p v-if="hasLoaded">{{ users.length }} users</p>
 				</div>
 
 				<div class="toolbar">
@@ -109,7 +111,7 @@ async function createUser(data) {
 						</RouterLink>
 					</div>
 
-					<ValueNotFound v-else />
+					<EmptyCard v-else-if="hasLoaded" />
 				</main>
 			</div>
 		</div>

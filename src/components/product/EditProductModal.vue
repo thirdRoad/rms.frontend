@@ -15,7 +15,6 @@ const categories = ref([])
 const formData = reactive({
 	name: '',
 	price: null,
-	stock: null,
 	category_id: null,
 })
 
@@ -32,7 +31,6 @@ watch(
 			Object.assign(formData, {
 				name: props.product.name,
 				price: props.product.price,
-				stock: props.product.stock,
 				category_id: props.product.category?.id ?? props.product.category_id ?? null,
 			})
 		}
@@ -64,11 +62,6 @@ const onSubmit = () => {
 					min="0"
 					required
 				/>
-			</div>
-
-			<div class="form-group">
-				<label for="productStock">Stock Quantity</label>
-				<input id="productStock" v-model.number="formData.stock" type="number" min="0" required />
 			</div>
 
 			<div class="form-group">

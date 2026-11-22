@@ -9,9 +9,10 @@ import CreateProductModal from '@/components/product/CreateProductModal.vue'
 import CreateCategoryModal from '@/components/category/CreateCategoryModal.vue'
 import SearchBox from '@/components/common/SearchBox.vue'
 import SortSelect from '@/components/common/SortSelect.vue'
-import ValueNotFound from '@/components/common/EmptyCard.vue'
+import EmptyCard from '@/components/common/EmptyCard.vue'
 
 const products = ref([])
+const hasLoaded = ref(false)
 const categories = ref([])
 
 const showProductModal = ref(false)
@@ -36,6 +37,7 @@ const fetchProducts = async () => {
 	if (searchValue.value.trim()) params.name = searchValue.value.trim()
 	if (sortValue.value) params.sort = sortValue.value
 	products.value = await productService.getProductList(params)
+	hasLoaded.value = true
 }
 
 const handleCategorySelect = async (id) => {
@@ -134,7 +136,7 @@ onMounted(() => {
 						</RouterLink>
 					</div>
 
-					<ValueNotFound v-else />
+					<EmptyCard v-else-if="hasLoaded" />
 				</main>
 			</div>
 		</div>
@@ -286,21 +288,6 @@ onMounted(() => {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
 	gap: 1.25rem;
-}
-
-.empty-state {
-	background-color: #ffffff;
-	border: 1.5px dashed #e5e7eb;
-	border-radius: 12px;
-	padding: 3rem 1.5rem;
-	text-align: center;
-	color: #6b7280;
-	font-size: 0.95rem;
-	font-weight: 500;
-}
-
-.empty-state p {
-	margin: 0;
 }
 
 .product-card-link {

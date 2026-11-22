@@ -1,4 +1,8 @@
-<script setup></script>
+<script setup>
+defineProps({
+	message: { type: String, default: 'No results found' },
+})
+</script>
 
 <template>
 	<div class="not-found-box">
