@@ -2,6 +2,8 @@
 import UserCard from '@/components/user/UserCard.vue'
 import RoleFilter from '@/components/user/RoleFilter.vue'
 import CreateUserModal from '@/components/user/CreateUserModal.vue'
+import SearchBox from '@/components/common/SearchBox.vue'
+import SortSelect from '@/components/common/SortSelect.vue'
 import { userService } from '@/services/user'
 import { ref, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
@@ -10,16 +12,54 @@ const users = ref([])
 const showCreateModal = ref(false)
 const isCreating = ref(false)
 
-onMounted(async () => {
-	users.value = await userService.getUserList()
+const selectedRoleId = ref(null)
+const searchValue = ref('')
+const sortValue = ref('')
+
+const sortOptions = [
+	{ label: 'Newest', value: '-created_at' },
+	{ label: 'Oldest', value: 'created_at' },
+	{ label: 'Username (A-Z)', value: 'username' },
+	{ label: 'Username (Z-A)', value: '-username' },
+	{ label: 'Display name (A-Z)', value: 'display_name' },
+	{ label: 'Display name (Z-A)', value: '-display_name' },
+	{ label: 'Email (A-Z)', value: 'email' },
+	{ label: 'Email (Z-A)', value: '-email' },
+]
+
+const fetchUsers = async () => {
+	const params = {}
+	if (selectedRoleId.value) params.role = selectedRoleId.value
+	if (searchValue.value) params.display_name = searchValue.value
+	if (sortValue.value) params.sort = sortValue.value
+	users.value = await userService.getUserList(params)
+}
+
+onMounted(() => {
+	fetchUsers()
 })
+
+const filterByRole = async (roleId) => {
+	selectedRoleId.value = roleId
+	await fetchUsers()
+}
+
+const handleSearch = async (value) => {
+	searchValue.value = value
+	await fetchUsers()
+}
+
+const handleSort = async (value) => {
+	sortValue.value = value
+	await fetchUsers()
+}
 
 async function createUser(data) {
 	isCreating.value = true
 
 	try {
 		await userService.createUser(data)
-		users.value = await userService.getUserList()
+		await fetchUsers()
 		showCreateModal.value = false
 	} catch (error) {
 		console.error(error)
@@ -38,6 +78,15 @@ async function createUser(data) {
 					<p>{{ users.length }} users</p>
 				</div>
 
+				<div class="toolbar">
+					<SearchBox
+						placeholder="Search by displayname..."
+						label="Search users"
+						@search="handleSearch"
+					/>
+					<SortSelect :options="sortOptions" label="Sort users" @sort="handleSort" />
+				</div>
+
 				<div class="actions">
 					<button class="action-btn" @click="showCreateModal = true">Add User</button>
 					<button class="action-btn secondary">Add Role</button>
@@ -45,7 +94,7 @@ async function createUser(data) {
 			</div>
 
 			<div class="content-layout">
-				<RoleFilter />
+				<RoleFilter @role="filterByRole" />
 
 				<main class="users-main">
 					<div class="users-grid">
@@ -111,6 +160,13 @@ async function createUser(data) {
 
 .action-btn:hover {
 	background-color: #be123c;
+}
+
+.toolbar {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 0.6rem;
 }
 
 .actions {
