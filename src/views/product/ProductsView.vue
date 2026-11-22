@@ -9,7 +9,7 @@ import CreateProductModal from '@/components/product/CreateProductModal.vue'
 import CreateCategoryModal from '@/components/category/CreateCategoryModal.vue'
 import SearchBox from '@/components/common/SearchBox.vue'
 import SortSelect from '@/components/common/SortSelect.vue'
-import ValueNotFound from '@/components/common/ValueNotFound.vue'
+import ValueNotFound from '@/components/common/EmptyCard.vue'
 
 const products = ref([])
 const categories = ref([])
@@ -134,11 +134,7 @@ onMounted(() => {
 						</RouterLink>
 					</div>
 
-					<ValueNotFound
-						v-else
-						title="No products found"
-						description="Try adjusting your search or category filter, or add a new product to the menu."
-					/>
+					<ValueNotFound v-else />
 				</main>
 			</div>
 		</div>
