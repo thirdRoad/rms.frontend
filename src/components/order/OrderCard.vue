@@ -11,7 +11,10 @@ const emit = defineEmits(['done', 'cancel'])
 	<div class="order-card" :class="`status-${order.status}`">
 		<div class="order-meta">
 			<span>#{{ order.id }}</span>
-			<span>{{ formatTime(order.time) }}</span>
+			<span>Table:  {{ order.table.id }}</span>
+			<span>User:  {{ order.user.username }}</span>
+
+			<span>{{ formatTime(order.created_at) }}</span>
 		</div>
 
 		<ul class="order-items">

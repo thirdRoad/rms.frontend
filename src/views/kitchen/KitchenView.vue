@@ -14,6 +14,11 @@ const sortValue = ref('')
 const sortOptions = [
 	{ label: 'Newest', value: '-created_at' },
 	{ label: 'Oldest', value: 'created_at' },
+	{ label: 'UserName(A-Z)', value: 'user_id' },
+	{ label: 'UserName(Z-A)', value: '-user_id' },
+	{ label: 'Increasing Table', value: 'table_id' },
+	{ label: 'Decreasing Table', value: '-table_id' },
+
 ]
 
 const fetchOrders = async () => {
@@ -21,7 +26,7 @@ const fetchOrders = async () => {
 	if (selectedStatusValue.value) params.status = selectedStatusValue.value
 	if (searchValue.value.trim()) params.table = searchValue.value.trim()
 	if (sortValue.value) params.sort = sortValue.value
-	orders.value = await orderService.createOrderObject(params)
+	orders.value = await orderService.getOrderList(params)
 }
 
 const handleStatus = async (status) => {

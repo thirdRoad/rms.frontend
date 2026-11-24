@@ -10,37 +10,6 @@ class OrderService {
 		return response.data
 	}
 
-	async getOrderItems(orderId) {
-		try {
-			const response = await api.get(`/orders/${orderId}/items`)
-			return response.data.data
-		} catch (error) {
-			if (error.response?.status === 404) {
-				return []
-			}
-			throw error
-		}
-	}
-
-	async createOrderObject(params = {}) {
-		const orders = await this.getOrderList(params)
-		const finalOrders = []
-
-		for (const order of orders) {
-			const orderId = order.id
-			const orderDate = order.created_at
-			const orderStatus = order.status
-
-			finalOrders.push({
-				id: orderId,
-				time: orderDate,
-				status: orderStatus,
-				items: await this.getOrderItems(orderId),
-			})
-		}
-
-		return finalOrders
-	}
 
 	async setOrderDone(orderId) {
 		try {
