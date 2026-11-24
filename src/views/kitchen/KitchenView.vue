@@ -14,8 +14,6 @@ const sortValue = ref('')
 const sortOptions = [
 	{ label: 'Newest', value: '-created_at' },
 	{ label: 'Oldest', value: 'created_at' },
-	{ label: 'UserName(A-Z)', value: 'user_id' },
-	{ label: 'UserName(Z-A)', value: '-user_id' },
 	{ label: 'Increasing Table', value: 'table_id' },
 	{ label: 'Decreasing Table', value: '-table_id' },
 ]
@@ -50,6 +48,7 @@ async function setStatusDone(orderId) {
 		const order = orders.value.find((o) => o.id === orderId)
 		if (order) order.status = 'done'
 	}
+	await fetchOrders()
 }
 
 async function setStatusCancel(orderId) {
@@ -59,6 +58,7 @@ async function setStatusCancel(orderId) {
 		const order = orders.value.find((o) => o.id === orderId)
 		if (order) order.status = 'cancelled'
 	}
+	await fetchOrders()
 }
 
 onMounted(fetchOrders)
