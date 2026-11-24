@@ -12,7 +12,6 @@ const emit = defineEmits(['submit', 'close'])
 const emptyForm = {
 	name: '',
 	price: null,
-	stock: null,
 	category_id: null,
 }
 
@@ -58,18 +57,6 @@ const onSubmit = () => {
 					step="0.01"
 					min="0"
 					placeholder="0.00"
-					required
-				/>
-			</div>
-
-			<div class="form-group">
-				<label for="productStock">Stock Quantity</label>
-				<input
-					id="productStock"
-					v-model.number="formData.stock"
-					type="number"
-					min="0"
-					placeholder="e.g. 50"
 					required
 				/>
 			</div>
