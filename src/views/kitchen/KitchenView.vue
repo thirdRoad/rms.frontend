@@ -5,11 +5,13 @@ import { orderService } from '@/services/order'
 import StatusFilter from '@/components/order/StatusFilter.vue'
 import SearchBox from '@/components/common/SearchBox.vue'
 import SortSelect from '@/components/common/SortSelect.vue'
+import EmptyCard from '@/components/common/EmptyCard.vue'
 
 const orders = ref([])
 const selectedStatusValue = ref(null)
 const searchValue = ref('')
 const sortValue = ref('')
+const hasLoaded = ref(false)
 
 const sortOptions = [
 	{ label: 'Newest', value: '-created_at' },
@@ -24,6 +26,7 @@ const fetchOrders = async () => {
 	if (searchValue.value.trim()) params.table = searchValue.value.trim()
 	if (sortValue.value) params.sort = sortValue.value
 	orders.value = await orderService.getOrderList(params)
+	hasLoaded.value = true
 }
 
 const handleStatus = async (status) => {
@@ -89,7 +92,7 @@ onMounted(fetchOrders)
 				</aside>
 
 				<main class="orders-scroll-area">
-					<div class="orders-grid">
+					<div v-if="orders.length > 0" class="orders-grid">
 						<OrderCard
 							v-for="order in orders"
 							:key="order.id"
@@ -98,6 +101,8 @@ onMounted(fetchOrders)
 							@cancel="setStatusCancel"
 						/>
 					</div>
+
+					<EmptyCard v-else-if="hasLoaded" />
 				</main>
 			</div>
 		</div>
