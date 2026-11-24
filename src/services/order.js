@@ -10,7 +10,6 @@ class OrderService {
 		return response.data
 	}
 
-
 	async setOrderDone(orderId) {
 		try {
 			await api.post(`/orders/${orderId}/done`)

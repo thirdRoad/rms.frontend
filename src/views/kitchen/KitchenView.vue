@@ -18,7 +18,6 @@ const sortOptions = [
 	{ label: 'UserName(Z-A)', value: '-user_id' },
 	{ label: 'Increasing Table', value: 'table_id' },
 	{ label: 'Decreasing Table', value: '-table_id' },
-
 ]
 
 const fetchOrders = async () => {
